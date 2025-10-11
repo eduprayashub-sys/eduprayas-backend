@@ -56,3 +56,16 @@ const PORT = process.env.PORT || 5002
 app.listen(PORT, () =>
   console.log(`✅ Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
 );
+
+// ✅ CORS Configuration (Frontend + Local)
+app.use(
+  cors({
+    origin: [
+      "https://eduprayas-frontend.vercel.app", // 🔹 replace with your actual Vercel frontend URL
+      "http://localhost:5173", // for local testing
+    ],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
