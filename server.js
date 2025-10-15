@@ -35,6 +35,7 @@ app.get("/", (req, res) => {
 });
 
 // 🧩 API Routes
+
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/tests", testRoutes);
@@ -45,10 +46,6 @@ app.use("/api/reports", reportRoutes);
 app.use("/api/admin", statsRoutes); // ✅ Admin analytics route
 app.use("/api/contact", contactRoutes);
 
-// 🧨 404 Fallback Route
-app.use((req, res) => {
-  res.status(404).json({ message: "Route not found" });
-});
 
 // ⚡ Server Start
 const PORT = process.env.PORT || 5002
@@ -61,7 +58,7 @@ app.listen(PORT, () =>
 app.use(
   cors({
     origin: [
-      "https://eduprayas-frontend.vercel.app", // 🔹 replace with your actual Vercel frontend URL
+      "https://eduprayas-frontend.vercel.app", 
       "http://localhost:5173", // for local testing
     ],
     credentials: true,
@@ -69,3 +66,7 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+// 🧨 404 Fallback Route
+app.use((req, res) => {
+  res.status(404).json({ message: "Route not found" });
+});
