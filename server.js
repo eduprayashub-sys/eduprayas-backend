@@ -4,10 +4,6 @@ import cors from "cors";
 import morgan from "morgan";
 import connectDB from "./config/db.js";
 
-console.log("🧭 Mounting Auth Routes...");
-app.use("/api/auth", authRoutes);
-console.log("✅ Auth Routes Mounted!");
-
 // 🛠 Route Imports
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
@@ -19,13 +15,16 @@ import reportRoutes from "./routes/reportRoutes.js";
 import statsRoutes from "./routes/statsRoutes.js";
 import contactRoutes from "./routes/contactRoutes.js";
 
-// ⚙️ Load environment variables
+// ⚙️ Environment Configuration
 dotenv.config();
 
 // 🚀 Initialize Express App
-const app = express();
+const app = express(); // ✅ app yaha initialize hona chahiye
 
-// ✅ CORS (यह सबसे ऊपर रहना चाहिए)
+// ✅ Database Connect
+connectDB();
+
+// ✅ Middleware
 app.use(
   cors({
     origin: [
@@ -37,18 +36,12 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
-
-// 🧱 Middleware
 app.use(express.json());
 app.use(morgan("dev"));
 
-// ✅ Connect MongoDB
-connectDB();
-
-// 🧭 Base Route
-app.get("/", (req, res) => {
-  res.send("🚀 EduPrayas API is running successfully!");
-});
+// ✅ Debug Logs
+console.log("✅ authRoutes file loaded");
+console.log("🧭 Mounting Auth Routes...");
 
 // 🧩 API Routes
 app.use("/api/auth", authRoutes);
@@ -61,13 +54,20 @@ app.use("/api/reports", reportRoutes);
 app.use("/api/admin", statsRoutes);
 app.use("/api/contact", contactRoutes);
 
-// 🧨 404 Fallback Route (सबसे नीचे)
+console.log("✅ Auth Routes Mounted!");
+
+// 🧭 Base Route
+app.get("/", (req, res) => {
+  res.send("🚀 EduPrayas API is running successfully!");
+});
+
+// 🧨 404 Fallback
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
 });
 
-// ⚡ Server Start
+// ⚡ Start Server
 const PORT = process.env.PORT || 5002;
-app.listen(PORT, () => {
-  console.log(`✅ Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
-});
+app.listen(PORT, () =>
+  console.log(`✅ Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
+);
