@@ -15,16 +15,13 @@ import reportRoutes from "./routes/reportRoutes.js";
 import statsRoutes from "./routes/statsRoutes.js";
 import contactRoutes from "./routes/contactRoutes.js";
 
-// ⚙️ Environment Configuration
+// ⚙️ Load .env
 dotenv.config();
 
 // 🚀 Initialize Express App
-const app = express(); // ✅ app yaha initialize hona chahiye
+const app = express();
 
-// ✅ Database Connect
-connectDB();
-
-// ✅ Middleware
+// ✅ CORS Configuration (Frontend + Local)
 app.use(
   cors({
     origin: [
@@ -36,12 +33,18 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
+// 🧱 Middleware
 app.use(express.json());
 app.use(morgan("dev"));
 
-// ✅ Debug Logs
-console.log("✅ authRoutes file loaded");
-console.log("🧭 Mounting Auth Routes...");
+// ✅ Connect Database
+connectDB();
+
+// 🧭 Base Route
+app.get("/", (req, res) => {
+  res.send("🚀 EduPrayas API is running successfully!");
+});
 
 // 🧩 API Routes
 app.use("/api/auth", authRoutes);
@@ -54,14 +57,7 @@ app.use("/api/reports", reportRoutes);
 app.use("/api/admin", statsRoutes);
 app.use("/api/contact", contactRoutes);
 
-console.log("✅ Auth Routes Mounted!");
-
-// 🧭 Base Route
-app.get("/", (req, res) => {
-  res.send("🚀 EduPrayas API is running successfully!");
-});
-
-// 🧨 404 Fallback
+// 🧨 404 Fallback Route
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
 });
