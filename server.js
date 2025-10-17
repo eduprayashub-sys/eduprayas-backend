@@ -4,6 +4,10 @@ import cors from "cors";
 import morgan from "morgan";
 import connectDB from "./config/db.js";
 
+console.log("🧭 Mounting Auth Routes...");
+app.use("/api/auth", authRoutes);
+console.log("✅ Auth Routes Mounted!");
+
 // 🛠 Route Imports
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
