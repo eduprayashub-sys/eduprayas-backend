@@ -15,27 +15,38 @@ import reportRoutes from "./routes/reportRoutes.js";
 import statsRoutes from "./routes/statsRoutes.js";
 import contactRoutes from "./routes/contactRoutes.js";
 
-// ⚙️ Environment Configuration
+// ⚙️ Load environment variables
 dotenv.config();
 
 // 🚀 Initialize Express App
 const app = express();
 
-// 🧱 Middleware
-app.use(cors());
-app.use(express.json());
-app.use(morgan("dev")); // Optional: logs requests in console
+// ✅ CORS (यह सबसे ऊपर रहना चाहिए)
+app.use(
+  cors({
+    origin: [
+      "https://eduprayas-frontend.vercel.app",
+      "http://localhost:5173",
+    ],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
-// ✅ Connect Database
+// 🧱 Middleware
+app.use(express.json());
+app.use(morgan("dev"));
+
+// ✅ Connect MongoDB
 connectDB();
 
-// 🧭 Base Route (API Welcome)
+// 🧭 Base Route
 app.get("/", (req, res) => {
   res.send("🚀 EduPrayas API is running successfully!");
 });
 
 // 🧩 API Routes
-
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/tests", testRoutes);
@@ -43,30 +54,16 @@ app.use("/api/questions", questionRoutes);
 app.use("/api/results", resultRoutes);
 app.use("/api/attempts", attemptRoutes);
 app.use("/api/reports", reportRoutes);
-app.use("/api/admin", statsRoutes); // ✅ Admin analytics route
+app.use("/api/admin", statsRoutes);
 app.use("/api/contact", contactRoutes);
 
-
-// ⚡ Server Start
-const PORT = process.env.PORT || 5002
-;
-app.listen(PORT, () =>
-  console.log(`✅ Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
-);
-
-// ✅ CORS Configuration (Frontend + Local)
-app.use(
-  cors({
-    origin: [
-      "https://eduprayas-frontend.vercel.app", 
-      "http://localhost:5173", // for local testing
-    ],
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
-// 🧨 404 Fallback Route
+// 🧨 404 Fallback Route (सबसे नीचे)
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
+});
+
+// ⚡ Server Start
+const PORT = process.env.PORT || 5002;
+app.listen(PORT, () => {
+  console.log(`✅ Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
 });
