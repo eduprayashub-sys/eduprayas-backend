@@ -46,6 +46,11 @@ app.get("/", (req, res) => {
   res.send("🚀 EduPrayas API is running successfully!");
 });
 
+// ✅ Test Route
+app.get("/api/test", (req, res) => {
+  res.json({ message: "✅ Test route working fine!" });
+});
+
 // 🧩 API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
