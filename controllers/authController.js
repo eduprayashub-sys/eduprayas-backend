@@ -13,15 +13,8 @@ export const registerUser = async (req, res) => {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create new user
-    const user = new User({
-      name,
-      email,
-      password: hashedPassword,
-    });
+    // 🚀 Create new user (password auto-hashed in model)
+    const user = new User({ name, email, password });
     await user.save();
 
     res.status(201).json({ message: "✅ Registration successful!" });
@@ -36,13 +29,14 @@ export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    // Find user
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Compare password
-    const isMatch = await bcrypt.compare(password, user.password);
+    // Compare password using model method
+    const isMatch = await user.matchPassword(password);
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
@@ -73,7 +67,7 @@ export const loginUser = async (req, res) => {
 // ✅ Get Logged-in User Profile
 export const getUserProfile = async (req, res) => {
   try {
-    const user = req.user; // From middleware (authMiddleware)
+    const user = req.user;
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -102,8 +96,7 @@ export const updatePassword = async (req, res) => {
     if (!isMatch)
       return res.status(400).json({ message: "Current password is incorrect" });
 
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(newPassword, salt);
+    user.password = newPassword; // will auto-hash before save
     await user.save();
 
     res.json({ message: "✅ Password updated successfully" });
