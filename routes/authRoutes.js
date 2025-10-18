@@ -12,9 +12,8 @@ const router = express.Router();
 
 // 🧪 Simple test route to check API connection
 router.get("/test", (req, res) => {
-  res.json({ message: "Eduprayas backend is live and connected!" });
+  res.json({ message: "Auth route working fine!" });
 });
-
 
 // 📝 Register a new user
 router.post("/register", registerUser);
