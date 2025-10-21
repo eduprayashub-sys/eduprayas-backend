@@ -25,7 +25,7 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "https://eduprayas-frontend.vercel.app", // ✅ Your main frontend link
+      "https://eduprayas-frontend-wunb.vercel.app", // ✅ Your main frontend link
       "http://localhost:5173"                  // ✅ Local testing (optional)
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
