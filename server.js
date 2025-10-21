@@ -25,8 +25,7 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "https://eduprayas-frontend-bwik.vercel.app", // current frontend
-      "https://eduprayas-frontend.vercel.app",       // optional previous frontend
+      "https://eduprayas-frontend.vercel.app",       
       "http://localhost:5173",                       // local dev
     ],
     credentials: true,
