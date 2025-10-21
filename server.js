@@ -22,7 +22,7 @@ dotenv.config();
 const app = express();
 
 // ✅ CORS Middleware (Fix for Render + Vercel)
-aapp.use(
+app.use(
   cors({
     origin: [
       "https://eduprayas-frontend.vercel.app", // ✅ Your main frontend link
