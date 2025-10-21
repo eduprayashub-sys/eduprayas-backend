@@ -22,17 +22,19 @@ dotenv.config();
 const app = express();
 
 // ✅ CORS Middleware (Fix for Render + Vercel)
-app.use(
+aapp.use(
   cors({
     origin: [
-      "https://eduprayas-frontend.vercel.app",       
-      "http://localhost:5173",                       // local dev
+      "https://eduprayas-frontend.vercel.app", // ✅ Your main frontend link
+      "http://localhost:5173"                  // ✅ Local testing (optional)
     ],
-    credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   })
 );
+
+app.options("*", cors()); // ✅ Handles preflight requests (important)
 
 // ✅ Middleware
 app.use(express.json());
