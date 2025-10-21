@@ -21,7 +21,7 @@ const app = express();
 // ✅ CORS Middleware FIRST
 app.use(
   cors({
-    origin: ["https://eduprayas-frontend.vercel.app", "http://localhost:5173"],
+    origin: ["https://eduprayas-frontendbwik.vercel.app", "http://localhost:5173"],
     credentials: true,
   })
 );
