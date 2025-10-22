@@ -4,7 +4,7 @@ import cors from "cors";
 import morgan from "morgan";
 import connectDB from "./config/db.js";
 
-// 🛠 Route Imports
+// 🧩 Import Routes
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import testRoutes from "./routes/testRoutes.js";
@@ -15,18 +15,19 @@ import reportRoutes from "./routes/reportRoutes.js";
 import statsRoutes from "./routes/statsRoutes.js";
 import contactRoutes from "./routes/contactRoutes.js";
 
-// ⚙️ Environment Config
 dotenv.config();
-
-// 🚀 Initialize Express App
 const app = express();
 
-// ✅ CORS Middleware (Fix for Render + Vercel)
+// ✅ Use JSON Parser + Logger
+app.use(express.json());
+app.use(morgan("dev"));
+
+// ✅ Enable CORS (Render + Local)
 app.use(
   cors({
     origin: [
-      "https://eduprayas-hub-frontend.vercel.app", // ✅ Your main frontend link
-      "http://localhost:5173"                  // ✅ Local testing (optional)
+      "https://eduprayas-hub-frontend.vercel.app", // 🔹 Your deployed frontend
+      "http://localhost:5173", // 🔹 Local dev frontend
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -34,21 +35,14 @@ app.use(
   })
 );
 
-app.options("*", cors()); // ✅ Handles preflight requests (important)
-
-// ✅ Middleware
-app.use(express.json());
-app.use(morgan("dev"));
-
 // ✅ Connect MongoDB
 connectDB();
 
-// 🧭 Base Route (Health Check)
-app.get("/", (req, res) => {
-  res.send("🚀 EduPrayas API is running successfully!");
-});
+// ✅ Debug Logs (for Render)
+console.log("✅ authRoutes file loaded");
+console.log("🧭 Mounting API routes...");
 
-// ✅ All API Routes
+// ✅ API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/tests", testRoutes);
@@ -59,12 +53,18 @@ app.use("/api/reports", reportRoutes);
 app.use("/api/admin", statsRoutes);
 app.use("/api/contact", contactRoutes);
 
-// 🧨 404 Fallback
+// ✅ Default Route
+app.get("/", (req, res) => {
+  res.send("🚀 EduPrayas API is running successfully!");
+});
+
+// ✅ 404 Route Handler
 app.use((req, res) => {
+  console.log("❌ 404 - Route not found:", req.originalUrl);
   res.status(404).json({ message: "Route not found" });
 });
 
-// ⚡ Start Server
+// ✅ Start Server
 const PORT = process.env.PORT || 5002;
 app.listen(PORT, () =>
   console.log(`✅ Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
