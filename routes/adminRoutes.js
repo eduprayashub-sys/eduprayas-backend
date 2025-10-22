@@ -21,6 +21,14 @@ import {
   deleteQuestion,
 } from "../controllers/questionController.js";
 
+import {
+  submitContactForm,
+  getAllContacts,
+  getAllMessages,
+  markMessageAsRead,
+  deleteMessage,
+} from "../controllers/contactController.js";
+
 import { protect, adminOnly } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
@@ -44,7 +52,6 @@ router.put("/users/toggle-role/:id", protect, adminOnly, toggleRole);
 // 🗑 Delete user
 router.delete("/users/:id", protect, adminOnly, deleteUser);
 
-
 /* ================================
    🧾 ADMIN TEST MANAGEMENT ROUTES
 ================================= */
@@ -60,7 +67,6 @@ router.put("/tests/:id", protect, adminOnly, updateTest);
 
 // ❌ Delete test
 router.delete("/tests/:id", protect, adminOnly, deleteTest);
-
 
 /* ================================
    🧠 ADMIN QUESTION MANAGEMENT
@@ -80,22 +86,21 @@ router.delete("/questions/:id", protect, adminOnly, deleteQuestion);
 
 /* ================================
    💬 CONTACT FORM ROUTES
-================================ */
-import { submitContactForm, getAllContacts } from "../controllers/contactController.js";
+================================= */
 
 // 🌐 Public route — anyone can send a message
 router.post("/contact", submitContactForm);
 
-// 👑 Admin route — only admin can view messages
+// 👑 Admin route — only admin can view all contacts
 router.get("/contacts", protect, adminOnly, getAllContacts);
 
-// 📁 routes/adminRoutes.js
-import { getAllMessages, markMessageAsRead } from "../controllers/contactController.js";
-
-// Get all messages (admin only)
+// 👑 Get all messages (admin only)
 router.get("/messages", protect, adminOnly, getAllMessages);
 
-// Mark as read (optional)
+// 🟢 Mark a message as read
 router.put("/messages/:id/read", protect, adminOnly, markMessageAsRead);
+
+// 🗑 Delete message
 router.delete("/messages/:id", protect, adminOnly, deleteMessage);
-export default router; 
+
+export default router;
