@@ -26,7 +26,7 @@ app.use(morgan("dev"));
 app.use(
   cors({
     origin: [
-      "https://eduprayas-hub-frontend.vercel.app", // 🔹 Your deployed frontend
+      "https://eduprayas-frontend.vercel.app", // 🔹 Your deployed frontend
       "http://localhost:5173", // 🔹 Local dev frontend
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
